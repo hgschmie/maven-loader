@@ -15,4 +15,5 @@ All the functionality is in the `MavenArtifactLoader` class. See the javadoc for
 ----
 
 (C) 2021 Henning P. Schmiedehausen
+
 Licensed under the Apache Software License V2.0
