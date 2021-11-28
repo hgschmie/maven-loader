@@ -58,7 +58,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
+/**
+ * A quick and dirty artifact loader. Downloads published artifacts from the Maven repository system.
+ * <p>
+ * The loader respects the local maven settings (repositories, mirrors etc.) if present. If no configuration is found, a hard-coded reference to <a
+ * href="https://repo.maven.apache.org/maven2/">Maven Central</a> is used.
+ */
 public final class MavenArtifactLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenArtifactLoader.class);
@@ -78,7 +85,23 @@ public final class MavenArtifactLoader {
     private final RepositorySystemSession mavenSession;
     private final List<RemoteRepository> remoteRepositories;
 
+    private final String extension;
+
+    /**
+     * Creates a new artifact loader for 'jar' artifacts.
+     */
     public MavenArtifactLoader() {
+        this("jar");
+    }
+
+    /**
+     * Creates a new artifact loader for artifacts.
+     *
+     * @param extension The artifact extension. Must not be null.
+     */
+    public MavenArtifactLoader(String extension) {
+        this.extension = requireNonNull(extension, "extension is null");
+
         @SuppressWarnings("deprecation")
         ServiceLocator serviceLocator = createServiceLocator();
         this.repositorySystem = serviceLocator.getService(RepositorySystem.class);
@@ -93,30 +116,55 @@ public final class MavenArtifactLoader {
 
             this.mavenSession = mavenSession.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(mavenSession, localRepository));
 
-
         } catch (SettingsBuildingException e) {
             throw new IllegalStateException("Could not load maven settings:", e);
         }
     }
 
+    /**
+     * Download an artifact file from the Maven repository system.
+     *
+     * @param groupId    The Apache Maven Group Id. Must not be null.
+     * @param artifactId The Apache Maven Artifact Id. Must not be null.
+     * @param version    The Apache Maven Artifact version. Must not be null.
+     * @return A file representing a successfully downloaded artifact.
+     * @throws IOException If the artifact could not be found or an IO problem happened while locating or downloading the artifact.
+     */
     public File getArtifactFile(String groupId, String artifactId, String version) throws IOException {
+        requireNonNull(groupId, "groupId is null");
+        requireNonNull(artifactId, "artifactId is null");
+        requireNonNull(version, "version is null");
 
         ArtifactRequest artifactRequest = new ArtifactRequest();
-        artifactRequest.setArtifact(new DefaultArtifact(groupId, artifactId, "jar", version));
+        artifactRequest.setArtifact(new DefaultArtifact(groupId, artifactId, extension, version));
         artifactRequest.setRepositories(this.remoteRepositories);
         try {
             ArtifactResult artifactResult = this.repositorySystem.resolveArtifact(mavenSession, artifactRequest);
             Artifact artifact = artifactResult.getArtifact();
-            LOG.info(format("Using PostgreSQL version %s", version));
             return artifact.getFile();
         } catch (RepositoryException e) {
             throw new IOException(e);
         }
     }
 
+    /**
+     * Find a matching artifact version from a partially defined artifact version.
+     * <p>
+     * Any located artifact in the repository system is compared to the version given.
+     *
+     * @param groupId    The Apache Maven Group Id. Must not be null.
+     * @param artifactId The Apache Maven Artifact Id. Must not be null.
+     * @param version    A partial version string. Must not be null. An empty string matches any version.
+     * @return The latest version that matches the partial version string. It either starts with the partial version string given (an empty version string
+     * matches any version) or is exactly the provided version.
+     * @throws IOException If an IO problem happened during artifact download or no versions were found during resolution.
+     */
     public String findLatestVersion(String groupId, String artifactId, String version) throws IOException {
+        requireNonNull(groupId, "groupId is null");
+        requireNonNull(artifactId, "artifactId is null");
+        requireNonNull(version, "version is null");
 
-        Artifact artifact = new DefaultArtifact(groupId, artifactId, "jar", "[0,)");
+        Artifact artifact = new DefaultArtifact(groupId, artifactId, extension, "[0,)");
 
         VersionRangeRequest rangeRequest = new VersionRangeRequest();
         rangeRequest.setArtifact(artifact);
@@ -128,14 +176,14 @@ public final class MavenArtifactLoader {
             List<Version> artifactVersions = rangeResult.getVersions();
             if (artifactVersions != null) {
                 for (Version artifactVersion : artifactVersions) {
-                    if (artifactVersion.toString().equals(version) || artifactVersion.toString().startsWith(version + '.')) {
+                    if (version.isEmpty() || artifactVersion.toString().equals(version) || artifactVersion.toString().startsWith(version + '.')) {
                         builder.add(artifactVersion);
                     }
                 }
             }
             SortedSet<Version> candiates = Collections.unmodifiableSortedSet(builder);
             if (candiates.isEmpty()) {
-                throw new IllegalStateException(format("No suitable candidate for %s:%s:%s found!", groupId, artifactId, version));
+                throw new IOException(format("No suitable candidate for %s:%s:%s found!", groupId, artifactId, version));
             }
             return candiates.last().toString();
         } catch (VersionRangeResolutionException e) {
