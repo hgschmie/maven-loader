@@ -98,6 +98,18 @@
                 <artifactId>org.eclipse.sisu.inject</artifactId>
                 <version>0.3.5</version>
             </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.15</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.12.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -232,6 +244,8 @@
                                 <excludes>
                                     <exclude>org.slf4j:*</exclude>
                                     <exclude>javax.inject:*</exclude>
+                                    <exclude>org.apache.commons:commons-lang3:*</exclude>
+                                    <exclude>commons-codec:commons-codec:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>
