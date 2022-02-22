@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.basepom</groupId>
         <artifactId>basepom-oss</artifactId>
-        <version>42</version>
+        <version>43</version>
     </parent>
 
     <scm>
@@ -49,6 +49,7 @@
         <dep.maven-resolver.version>1.6.3</dep.maven-resolver.version>
 
         <dep.plugin.flatten.version>1.2.2</dep.plugin.flatten.version>
+        <dep.plugin.inline.version>1.0</dep.plugin.inline.version>
     </properties>
 
     <licenses>
@@ -190,10 +191,6 @@
                                 <rules>
                                     <!-- Ensure consistency -->
                                     <dependencyConvergence />
-                                    <requireJavaVersion>
-                                        <!-- post java 11 for correct javadoc build -->
-                                        <version>[12,)</version>
-                                    </requireJavaVersion>
                                 </rules>
                             </configuration>
                         </execution>
@@ -216,6 +213,7 @@
                     <version>${dep.plugin.flatten.version}</version>
                     <configuration>
                         <flattenMode>oss</flattenMode>
+                        <outputDirectory>${project.build.directory}</outputDirectory>
                         <pomElements>
                             <properties>remove</properties>
                             <distributionManagement>remove</distributionManagement>
@@ -223,48 +221,59 @@
                         </pomElements>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.basepom.maven</groupId>
+                    <artifactId>inline-maven-plugin</artifactId>
+                    <version>${dep.plugin.inline.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.basepom.inline</groupId>
+                            <artifactId>transformer-optional</artifactId>
+                            <version>${dep.plugin.inline.version}</version>
+                        </dependency>
+                    </dependencies>
+
+                    <configuration>
+                        <prefix>de.softwareforge.testing.maven</prefix>
+                        <hideClasses>true</hideClasses>
+                        <additionalProcessors>
+                            <additionalProcessor>org.basepom.inline.transformer.optional.SisuCollectingProcessor</additionalProcessor>
+                            <additionalProcessor>org.basepom.inline.transformer.optional.SisuRewritingProcessor</additionalProcessor>
+                        </additionalProcessors>
+                        <inlineDependencies>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-api</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-spi</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-impl</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-connector-basic</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-transport-file</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-transport-http</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven:maven-resolver-provider</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven:maven-settings</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven:maven-settings-builder</artifact>
+                            </inlineDependency>
+                        </inlineDependencies>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-                            <artifactSet combine.children="override">
-                                <excludes>
-                                    <exclude>org.slf4j:*</exclude>
-                                    <exclude>javax.inject:*</exclude>
-                                    <exclude>org.apache.commons:commons-lang3:*</exclude>
-                                    <exclude>commons-codec:commons-codec:*</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>about.html</exclude>
-                                        <exclude>licenses/**</exclude>
-                                        <exclude>mozilla/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers combine.children="override">
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
@@ -281,6 +290,18 @@
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>inline-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>inline</goal>
                         </goals>
                     </execution>
                 </executions>
