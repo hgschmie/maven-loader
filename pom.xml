@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.basepom</groupId>
         <artifactId>basepom-oss</artifactId>
-        <version>43</version>
+        <version>53</version>
     </parent>
 
     <scm>
@@ -31,7 +31,7 @@
 
     <groupId>de.softwareforge.testing</groupId>
     <artifactId>maven-loader</artifactId>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
 
     <name>maven-loader</name>
     <description>All-in-one Maven repository artifact loader</description>
@@ -39,16 +39,22 @@
     <inceptionYear>2021</inceptionYear>
 
     <properties>
+        <basepom.check.skip-dependency-management>true</basepom.check.skip-dependency-management>
+
         <project.build.targetJdk>11</project.build.targetJdk>
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
 
         <dep.slf4j.version>1.7.32</dep.slf4j.version>
+        <dep.plexus-utils.version>3.4.1</dep.plexus-utils.version>
+        <dep.sisu-inject.version>0.3.5</dep.sisu-inject.version>
+        <dep.commons-codec.version>1.15</dep.commons-codec.version>
+        <dep.commons-lang3.version>3.12.0</dep.commons-lang3.version>
 
-        <dep.maven.version>3.8.4</dep.maven.version>
         <!-- must match the resolver used in the maven core libs -->
         <dep.maven-resolver.version>1.6.3</dep.maven-resolver.version>
+        <dep.maven.version>3.8.4</dep.maven.version>
 
-        <dep.plugin.flatten.version>1.2.2</dep.plugin.flatten.version>
+        <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
         <dep.plugin.inline.version>1.0.1</dep.plugin.inline.version>
     </properties>
 
@@ -91,25 +97,25 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>3.4.1</version>
+                <version>${dep.plexus-utils.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.eclipse.sisu</groupId>
                 <artifactId>org.eclipse.sisu.inject</artifactId>
-                <version>0.3.5</version>
+                <version>${dep.sisu-inject.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.15</version>
+                <version>${dep.commons-codec.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>${dep.commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -305,13 +311,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.hubspot.maven.plugins</groupId>
-                <artifactId>dependency-management-maven-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
             </plugin>
         </plugins>
     </build>
