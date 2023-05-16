@@ -44,15 +44,16 @@
         <project.build.targetJdk>11</project.build.targetJdk>
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
 
-        <dep.slf4j.version>1.7.32</dep.slf4j.version>
-        <dep.plexus-utils.version>3.4.1</dep.plexus-utils.version>
-        <dep.sisu-inject.version>0.3.5</dep.sisu-inject.version>
+        <dep.slf4j.version>1.7.36</dep.slf4j.version>
+        <dep.plexus-utils.version>3.5.1</dep.plexus-utils.version>
+        <dep.sisu-inject.version>0.9.0.M2</dep.sisu-inject.version>
         <dep.commons-codec.version>1.15</dep.commons-codec.version>
         <dep.commons-lang3.version>3.12.0</dep.commons-lang3.version>
+        <dep.httpcore.version>4.4.16</dep.httpcore.version>
 
         <!-- must match the resolver used in the maven core libs -->
-        <dep.maven-resolver.version>1.6.3</dep.maven-resolver.version>
-        <dep.maven.version>3.8.4</dep.maven.version>
+        <dep.maven-resolver.version>1.9.10</dep.maven-resolver.version>
+        <dep.maven.version>3.9.2</dep.maven.version>
 
         <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
         <dep.plugin.inline.version>1.0.1</dep.plugin.inline.version>
@@ -116,6 +117,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${dep.commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${dep.httpcore.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
