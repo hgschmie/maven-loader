@@ -41,7 +41,7 @@ deploy-site::
 release::
 	${MAVEN} clean release:clean release:prepare release:perform
 
-release-site:: MAVEN_CONFIG += -Ppg-embedded-release
+release-site:: MAVEN_CONFIG += -Prelease
 release-site:: deploy-site
 
 help::

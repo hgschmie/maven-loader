@@ -46,6 +46,8 @@
         <project.javadoc.legacy-mode>true</project.javadoc.legacy-mode>
 
         <dep.slf4j.version>1.7.36</dep.slf4j.version>
+        <dep.junit5.version>5.10.0</dep.junit5.version>
+        <dep.assertj.version>3.24.2</dep.assertj.version>
         <dep.plexus-utils.version>3.5.1</dep.plexus-utils.version>
         <dep.sisu-inject.version>0.9.0.M2</dep.sisu-inject.version>
 
@@ -82,8 +84,22 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${dep.junit5.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
+                <version>${dep.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
                 <version>${dep.slf4j.version}</version>
             </dependency>
 
@@ -133,6 +149,12 @@
 
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-util</artifactId>
+            <version>${dep.maven-resolver.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-connector-basic</artifactId>
             <version>${dep.maven-resolver.version}</version>
         </dependency>
@@ -166,6 +188,32 @@
             <artifactId>maven-settings-builder</artifactId>
             <version>${dep.maven.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${dep.assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -231,6 +279,9 @@
                             </inlineDependency>
                             <inlineDependency>
                                 <artifact>org.apache.maven.resolver:maven-resolver-impl</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>org.apache.maven.resolver:maven-resolver-util</artifact>
                             </inlineDependency>
                             <inlineDependency>
                                 <artifact>org.apache.maven.resolver:maven-resolver-connector-basic</artifact>

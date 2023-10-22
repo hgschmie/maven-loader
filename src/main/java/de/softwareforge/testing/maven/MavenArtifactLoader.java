@@ -123,6 +123,20 @@ public final class MavenArtifactLoader {
     }
 
     /**
+     * Create a new version match builder to retrieve an artifact.
+     *
+     * @param groupId    The Apache Maven Group Id. Must not be null.
+     * @param artifactId The Apache Maven Artifact Id. Must not be null.
+     * @return A {@link MavenVersionMatchBuilder} instance
+     */
+    public MavenVersionMatchBuilder builder(String groupId, String artifactId) {
+        requireNonNull(groupId, "groupId is null");
+        requireNonNull(artifactId, "artifactId is null");
+
+        return new MavenVersionMatchBuilder(this, groupId, artifactId);
+    }
+
+    /**
      * Download an artifact file from the Maven repository system.
      *
      * @param groupId    The Apache Maven Group Id. Must not be null.
@@ -152,6 +166,17 @@ public final class MavenArtifactLoader {
      * Find a matching artifact version from a partially defined artifact version.
      * <p>
      * Any located artifact in the repository system is compared to the version given.
+     * <br>
+     * Using this method is equivalent to calling
+     * <pre>
+     *  builder(groupId, artifactId)
+     *                 .partialMatch(version)
+     *                 .extension(extension)
+     *                 .includeSnapshots(true)
+     *                 .findBestMatch();
+     * </pre>
+     *
+     * but will throw an IOException if no version could be found.
      *
      * @param groupId    The Apache Maven Group Id. Must not be null.
      * @param artifactId The Apache Maven Artifact Id. Must not be null.
@@ -164,8 +189,17 @@ public final class MavenArtifactLoader {
         requireNonNull(groupId, "groupId is null");
         requireNonNull(artifactId, "artifactId is null");
         requireNonNull(version, "version is null");
+        return builder(groupId, artifactId)
+                .partialMatch(version)
+                .extension(extension)
+                .includeSnapshots(true)
+                .findBestMatch()
+                .orElseThrow(() -> new IOException(format("No suitable candidate for %s:%s:%s found!", groupId, artifactId, version)));
+    }
 
-        Artifact artifact = new DefaultArtifact(groupId, artifactId, extension, "[0,)");
+    SortedSet<Version> findAllVersions(MavenVersionMatchBuilder builder) throws IOException {
+
+        Artifact artifact = new DefaultArtifact(builder.groupId(), builder.artifactId(), builder.extension(), "[0,)");
 
         VersionRangeRequest rangeRequest = new VersionRangeRequest();
         rangeRequest.setArtifact(artifact);
@@ -173,24 +207,30 @@ public final class MavenArtifactLoader {
 
         try {
             VersionRangeResult rangeResult = this.repositorySystem.resolveVersionRange(mavenSession, rangeRequest);
-            SortedSet<Version> builder = new TreeSet<>();
+            SortedSet<Version> resultBuilder = new TreeSet<>();
             List<Version> artifactVersions = rangeResult.getVersions();
+            VersionStrategy versionStrategy = builder.versionStrategy();
             if (artifactVersions != null) {
                 for (Version artifactVersion : artifactVersions) {
-                    if (version.isEmpty() || artifactVersion.toString().equals(version) || artifactVersion.toString().startsWith(version + '.')) {
-                        builder.add(artifactVersion);
+                    boolean isSnapshot = artifactVersion.toString().endsWith("-SNAPSHOT");
+                    boolean match = versionStrategy.matchVersion(artifactVersion);
+
+                    // remove match if snapshots are not requested but the version is a snapshot
+                    if (isSnapshot) {
+                        match &= builder.includeSnapshots();
+                    }
+
+                    if (match) {
+                        resultBuilder.add(artifactVersion);
                     }
                 }
             }
-            SortedSet<Version> candiates = Collections.unmodifiableSortedSet(builder);
-            if (candiates.isEmpty()) {
-                throw new IOException(format("No suitable candidate for %s:%s:%s found!", groupId, artifactId, version));
-            }
-            return candiates.last().toString();
+            return Collections.unmodifiableSortedSet(resultBuilder);
         } catch (VersionRangeResolutionException e) {
             throw new IOException(format("Could not resolve version range: %s", rangeRequest), e);
         }
     }
+
 
     @SuppressWarnings("deprecation")
     private static ServiceLocator createServiceLocator() {
