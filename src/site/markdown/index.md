@@ -66,10 +66,3 @@ List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
 MavenArtifactLoader loader = new MavenArtifactLoader();
 File artifactFile = loader.getArtifactFile(GROUP_ID, ARTIFACT_ID, "2.1.1");
 ```
-
-
-----
-
-(C) 2021-2023 Henning P. Schmiedehausen
-
-Licensed under the Apache Software License V2.0

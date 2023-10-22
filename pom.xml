@@ -40,10 +40,17 @@
 
     <properties>
         <basepom.check.skip-dependency-management>true</basepom.check.skip-dependency-management>
+        <basepom.release.profiles>basepom.oss-release,release</basepom.release.profiles>
+        <basepom.site.scm.skip-deploy>false</basepom.site.scm.skip-deploy>
+        <basepom.site.scm.id>github</basepom.site.scm.id>
+        <basepom.site.scm.url>scm:git:https://github.com/hgschmie/softwareforge.github.io.git</basepom.site.scm.url>
+        <basepom.site.scm.site-path>/maven-loader/dev</basepom.site.scm.site-path>
+
+        <basepom.javadoc.legacy-mode>true</basepom.javadoc.legacy-mode>
+        <basepom.javadoc.skip>false</basepom.javadoc.skip>
 
         <project.build.targetJdk>11</project.build.targetJdk>
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
-        <project.javadoc.legacy-mode>true</project.javadoc.legacy-mode>
 
         <dep.slf4j.version>1.7.36</dep.slf4j.version>
         <dep.junit5.version>5.10.0</dep.junit5.version>
@@ -344,4 +351,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <basepom.site.scm.site-path>/maven-loader/release-${project.version}</basepom.site.scm.site-path>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-java21</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireJavaVersion>
+                                            <version>[21,)</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
