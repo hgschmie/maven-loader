@@ -17,9 +17,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.basepom</groupId>
-        <artifactId>basepom-oss</artifactId>
-        <version>53</version>
+        <groupId>org.kitei</groupId>
+        <artifactId>kitei-root</artifactId>
+        <version>15</version>
     </parent>
 
     <scm>
@@ -43,20 +43,18 @@
 
         <project.build.targetJdk>11</project.build.targetJdk>
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
+        <project.javadoc.legacy-mode>true</project.javadoc.legacy-mode>
 
         <dep.slf4j.version>1.7.36</dep.slf4j.version>
         <dep.plexus-utils.version>3.5.1</dep.plexus-utils.version>
         <dep.sisu-inject.version>0.9.0.M2</dep.sisu-inject.version>
-        <dep.commons-codec.version>1.15</dep.commons-codec.version>
-        <dep.commons-lang3.version>3.12.0</dep.commons-lang3.version>
-        <dep.httpcore.version>4.4.16</dep.httpcore.version>
 
         <!-- must match the resolver used in the maven core libs -->
-        <dep.maven-resolver.version>1.9.10</dep.maven-resolver.version>
-        <dep.maven.version>3.9.2</dep.maven.version>
+        <dep.maven-resolver.version>1.9.16</dep.maven-resolver.version>
+        <dep.maven.version>3.9.5</dep.maven.version>
 
         <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
-        <dep.plugin.inline.version>1.0.1</dep.plugin.inline.version>
+        <dep.plugin.inline.version>1.2.0</dep.plugin.inline.version>
     </properties>
 
     <licenses>
@@ -105,24 +103,6 @@
                 <groupId>org.eclipse.sisu</groupId>
                 <artifactId>org.eclipse.sisu.inject</artifactId>
                 <version>${dep.sisu-inject.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${dep.commons-codec.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${dep.commons-lang3.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>${dep.httpcore.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -210,17 +190,6 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <configuration>
-                        <archive>
-                            <manifestEntries combine.children="append">
-                                <Automatic-Module-Name>${project.moduleName}</Automatic-Module-Name>
-                            </manifestEntries>
-                        </archive>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>${dep.plugin.flatten.version}</version>
@@ -280,6 +249,9 @@
                             </inlineDependency>
                             <inlineDependency>
                                 <artifact>org.apache.maven:maven-settings-builder</artifact>
+                            </inlineDependency>
+                            <inlineDependency>
+                                <artifact>commons-codec:commons-codec</artifact>
                             </inlineDependency>
                         </inlineDependencies>
                     </configuration>
