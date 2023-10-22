@@ -1,8 +1,5 @@
+---
 name: CD (Snapshot deployment)
-
-defaults:
-  distribution: temurin
-  java-version: 21
 
 on:
   push:
@@ -20,6 +17,8 @@ jobs:
         id: setup_jdk
         name: Setup JDK
         with:
+          distribution: temurin
+          java-version: 21
           cache: maven
           server-id: sonatype-nexus-snapshots
           server-username: NEXUS_REPO_USER
@@ -46,6 +45,8 @@ jobs:
       - name: setup jdk
         uses: actions/setup-java@v3
         with:
+          distribution: temurin
+          java-version: 21
           cache: maven
           server-id: github
           server-password: SITE_DEPLOY
