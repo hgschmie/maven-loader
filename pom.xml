@@ -40,7 +40,7 @@
 
     <properties>
         <basepom.check.skip-dependency-management>true</basepom.check.skip-dependency-management>
-        <basepom.release.profiles>basepom.oss-release,release</basepom.release.profiles>
+        <basepom.release.profiles>basepom.deploy-release,release</basepom.release.profiles>
         <basepom.site.scm.skip-deploy>false</basepom.site.scm.skip-deploy>
         <basepom.site.scm.id>github</basepom.site.scm.id>
         <basepom.site.scm.url>scm:git:https://github.com/hgschmie/softwareforge.github.io.git</basepom.site.scm.url>
