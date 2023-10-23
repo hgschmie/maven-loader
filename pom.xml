@@ -63,7 +63,7 @@
         <dep.maven.version>3.9.5</dep.maven.version>
 
         <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
-        <dep.plugin.inline.version>1.2.0</dep.plugin.inline.version>
+        <dep.plugin.inline.version>1.3.0</dep.plugin.inline.version>
     </properties>
 
     <licenses>
@@ -312,6 +312,9 @@
                                 <artifact>commons-codec:commons-codec</artifact>
                             </inlineDependency>
                         </inlineDependencies>
+                        <excludes>
+                            <exclude>org.slf4j:slf4j-api</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
             </plugins>
