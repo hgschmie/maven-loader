@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.aether.repository.RemoteRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public final class TestMavenArtifactLoader {
@@ -29,10 +31,22 @@ public final class TestMavenArtifactLoader {
     static final String GROUP_ID = "de.softwareforge.testing";
     static final String ARTIFACT_ID = "maven-loader";
 
+    MavenArtifactLoader loader;
+
+    @BeforeEach
+    public void setUp() {
+        // enforce repo list for reproducible tests
+        final List<RemoteRepository> knownRemoteRepos = List.of(
+                MavenArtifactLoader.CENTRAL_REPO,
+                new RemoteRepository.Builder("snapshots", "default", "https://oss.sonatype.org/content/repositories/snapshots/").build()
+        );
+
+        this.loader = new MavenArtifactLoader("jar", knownRemoteRepos);
+    }
+
+
     @Test
     void testFindVersion21X() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .includeSnapshots(false)
                 .partialMatch("2.1")
@@ -46,8 +60,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testFindVersion210() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .includeSnapshots(false)
                 .exactMatch("2.1.0")
@@ -60,8 +72,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testFindSnapshotVersion210() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .includeSnapshots(true)
                 .partialMatch("2.1")
@@ -74,8 +84,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testSemVerMajor() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .semVerMajor(1)
                 .includeSnapshots(false)
@@ -88,8 +96,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testSemVerMajorBest() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         Optional<String> result = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .semVerMajor(1)
                 .includeSnapshots(false)
@@ -100,8 +106,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testSemVerMajor0OnlySnapshot() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         Optional<String> result = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .semVerMajor(0)
                 .findBestMatch();
@@ -112,8 +116,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testSemVerMajorNotFound() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         Optional<String> result = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .semVerMajor(0)
                 .includeSnapshots(false)
@@ -124,8 +126,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testSemVerMinor() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         List<String> results = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .semVerMinor(2, 1)
                 .includeSnapshots(false)
@@ -139,8 +139,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testFindLatestVersion() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         LinkedList<String> results = loader.builder(GROUP_ID, ARTIFACT_ID).findAll();
 
         String latestVersion = loader.findLatestVersion(GROUP_ID, ARTIFACT_ID, "");
@@ -153,8 +151,6 @@ public final class TestMavenArtifactLoader {
 
     @Test
     void testLoadArtifact() throws IOException {
-        MavenArtifactLoader loader = new MavenArtifactLoader();
-
         Optional<String> result = loader.builder(GROUP_ID, ARTIFACT_ID)
                 .includeSnapshots(false)
                 .partialMatch("2.1")
