@@ -62,8 +62,8 @@
         <dep.maven-resolver.version>1.9.22</dep.maven-resolver.version>
         <dep.maven.version>3.9.9</dep.maven.version>
 
-        <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
-        <dep.plugin.inline.version>1.3.0</dep.plugin.inline.version>
+        <dep.plugin.flatten.version>1.6.0</dep.plugin.flatten.version>
+        <dep.plugin.inline.version>1.4.0</dep.plugin.inline.version>
     </properties>
 
     <licenses>
