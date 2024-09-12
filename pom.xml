@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.kitei</groupId>
         <artifactId>kitei-root</artifactId>
-        <version>15</version>
+        <version>16</version>
     </parent>
 
     <scm>
@@ -53,14 +53,14 @@
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
 
         <dep.slf4j.version>1.7.36</dep.slf4j.version>
-        <dep.junit5.version>5.10.0</dep.junit5.version>
-        <dep.assertj.version>3.24.2</dep.assertj.version>
+        <dep.junit5.version>5.11.0</dep.junit5.version>
+        <dep.assertj.version>3.26.3</dep.assertj.version>
         <dep.plexus-utils.version>3.5.1</dep.plexus-utils.version>
-        <dep.sisu-inject.version>0.9.0.M2</dep.sisu-inject.version>
+        <dep.sisu-inject.version>0.9.0.M3</dep.sisu-inject.version>
 
         <!-- must match the resolver used in the maven core libs -->
-        <dep.maven-resolver.version>1.9.16</dep.maven-resolver.version>
-        <dep.maven.version>3.9.5</dep.maven.version>
+        <dep.maven-resolver.version>1.9.22</dep.maven-resolver.version>
+        <dep.maven.version>3.9.9</dep.maven.version>
 
         <dep.plugin.flatten.version>1.5.0</dep.plugin.flatten.version>
         <dep.plugin.inline.version>1.3.0</dep.plugin.inline.version>
