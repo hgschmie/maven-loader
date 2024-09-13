@@ -35,7 +35,7 @@
 
     <name>maven-loader</name>
     <description>All-in-one Maven repository artifact loader</description>
-    <url>https://github.com/hgschmie/maven-loader/</url>
+    <url>https://softwareforge.de/maven-loader/</url>
     <inceptionYear>2021</inceptionYear>
 
     <properties>
