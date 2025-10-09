@@ -38,7 +38,7 @@ public final class TestMavenArtifactLoader {
         // enforce repo list for reproducible tests
         final List<RemoteRepository> knownRemoteRepos = List.of(
                 MavenArtifactLoader.CENTRAL_REPO,
-                new RemoteRepository.Builder("snapshots", "default", "https://oss.sonatype.org/content/repositories/snapshots/").build()
+                new RemoteRepository.Builder("snapshots", "default", "https://central.sonatype.com/repository/maven-snapshots/").build()
         );
 
         this.loader = new MavenArtifactLoader("jar", knownRemoteRepos);
