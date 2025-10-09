@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~   Licensed under the Apache License, Version 2.0 (the "License");
+~   you may not use this file except in compliance with the License.
+~   You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~   Unless required by applicable law or agreed to in writing, software
+~   distributed under the License is distributed on an "AS IS" BASIS,
+~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~   See the License for the specific language governing permissions and
+~   limitations under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.softwareforge.testing</groupId>
+        <artifactId>maven-loader-build-root</artifactId>
+        <version>2.4.2-SNAPSHOT</version>
+        <relativePath>../build</relativePath>
+    </parent>
+
+    <artifactId>maven-loader</artifactId>
+    <name>maven-loader :: code</name>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
+
+        <basepom.javadoc.legacy-mode>true</basepom.javadoc.legacy-mode>
+        <basepom.javadoc.skip>false</basepom.javadoc.skip>
+        <basepom.site.fail-javadoc>false</basepom.site.fail-javadoc>
+
+        <!-- does not work with flattened pom -->
+        <basepom.check.skip-dependency-management>true</basepom.check.skip-dependency-management>
+
+        <!-- Site is built in this directory -->
+        <basepom.site.scm.skip>false</basepom.site.scm.skip>
+        <basepom.site.scm.skip-deploy>false</basepom.site.scm.skip-deploy>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-spi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-connector-basic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-transport-file</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-transport-http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-resolver-provider</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-settings</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-settings-builder</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>inline-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>inline</goal>
+                        </goals>
+                        <configuration>
+                            <prefix>de.softwareforge.testing.maven</prefix>
+                            <hideClasses>true</hideClasses>
+                            <additionalProcessors>
+                                <additionalProcessor>org.basepom.inline.transformer.optional.SisuCollectingProcessor</additionalProcessor>
+                                <additionalProcessor>org.basepom.inline.transformer.optional.SisuRewritingProcessor</additionalProcessor>
+                            </additionalProcessors>
+                            <inlineDependencies>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-api</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-spi</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-impl</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-util</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-connector-basic</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-transport-file</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven.resolver:maven-resolver-transport-http</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven:maven-resolver-provider</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven:maven-settings</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>org.apache.maven:maven-settings-builder</artifact>
+                                </inlineDependency>
+                                <inlineDependency>
+                                    <artifact>commons-codec:commons-codec</artifact>
+                                </inlineDependency>
+                            </inlineDependencies>
+                            <excludes>
+                                <exclude>org.slf4j:slf4j-api</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-invoker-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
