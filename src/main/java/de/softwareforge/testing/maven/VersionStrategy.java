@@ -19,6 +19,7 @@ import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.eclipse.aether.version.Version;
 import org.eclipse.aether.version.VersionRange;
 
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 interface VersionStrategy {
 
     static VersionStrategy partialMatch(String partial) {
