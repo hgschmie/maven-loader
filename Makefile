@@ -15,7 +15,8 @@ SHELL = /bin/sh
 
 MAVEN = ./mvnw
 
-export MAVEN_OPTS MAVEN_ARGS
+export MAVEN_OPTS
+export MAVEN_ARGS
 
 # must be the first target
 default:: help
@@ -34,14 +35,13 @@ test::
 deploy::
 	${MAVEN} clean deploy
 
-# run install b/c https://issues.apache.org/jira/browse/MJAVADOC-701
 deploy-site::
 	${MAVEN} clean install site-deploy
 
 release::
 	${MAVEN} clean release:clean release:prepare release:perform
 
-release-site:: MAVEN_ARGS += -Prelease
+release-site:: MAVEN_ARGS += -Pmaven-loader.release
 release-site:: deploy-site
 
 help::
