@@ -3,6 +3,7 @@
 
 This is a repackaged version of a bunch of Apache Maven dependencies, intended to offer a quick way to locate and download artifacts from the Maven central repository. It resolves all maven internal dependencies consistently and hides the existing library dependency problems from code that wants to download artifacts from the Maven repository system.
 
+The maven site with documentation is at [https://softwareforge.de/maven-loader].
 
 As most things Maven are simply a mess (and even internally inconsistent), this bundles up
 
@@ -70,6 +71,6 @@ File artifactFile = loader.getArtifactFile(GROUP_ID, ARTIFACT_ID, "2.1.1");
 
 ----
 
-(C) 2021-2023 Henning P. Schmiedehausen
+(C) 2021-2025 Henning P. Schmiedehausen
 
 Licensed under the Apache Software License V2.0
