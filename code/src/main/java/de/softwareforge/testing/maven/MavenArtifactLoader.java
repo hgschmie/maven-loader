@@ -71,7 +71,12 @@ public final class MavenArtifactLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenArtifactLoader.class);
 
-    static final RemoteRepository CENTRAL_REPO = new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/").build();
+    private static final RemoteRepository CENTRAL_REPO = new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/").build();
+
+    private static final List<RemoteRepository> knownRemoteRepos = List.of(
+            CENTRAL_REPO,
+            new RemoteRepository.Builder("snapshots", "default", "https://central.sonatype.com/repository/maven-snapshots/").build()
+    );
 
     private static final String USER_HOME = System.getProperty("user.home");
     private static final File USER_MAVEN_HOME = new File(USER_HOME, ".m2");
@@ -104,7 +109,11 @@ public final class MavenArtifactLoader {
         this(extension, null);
     }
 
-    MavenArtifactLoader(String extension, List<RemoteRepository> remoteRepositoriesForTesting) {
+    static MavenArtifactLoader forTesting() {
+        return new MavenArtifactLoader("jar", knownRemoteRepos);
+    }
+
+    private MavenArtifactLoader(String extension, List<RemoteRepository> remoteRepositoriesForTesting) {
         this.extension = requireNonNull(extension, "extension is null");
 
         @SuppressWarnings("deprecation")

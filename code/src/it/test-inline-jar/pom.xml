@@ -76,7 +76,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <dependenciesToScan>
-                        <dependency>de.softwareforge:maven-loader:*:tests</dependency>
+                        <dependency>de.softwareforge.testing:maven-loader:*:tests</dependency>
                     </dependenciesToScan>
                 </configuration>
             </plugin>
