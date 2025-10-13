@@ -53,7 +53,7 @@ deploy-site:: install
 release::
 	${MAVEN} clean release:clean release:prepare release:perform
 
-release-site:: MAVEN_ARGS += -Pmaven-loader.release
+release-site:: MAVEN_ARGS += -Pkitei.release
 release-site:: deploy-site
 
 help::

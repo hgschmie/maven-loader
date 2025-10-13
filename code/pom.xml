@@ -39,7 +39,7 @@
         <basepom.check.skip-dependency-management>true</basepom.check.skip-dependency-management>
 
         <!-- Site is built in this directory -->
-        <basepom.site.scm.skip>false</basepom.site.scm.skip>
+        <basepom.site.skip>false</basepom.site.skip>
         <basepom.site.scm.skip-deploy>false</basepom.site.scm.skip-deploy>
     </properties>
 
