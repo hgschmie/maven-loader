@@ -73,38 +73,9 @@
         <dep.maven.version>3.9.11</dep.maven.version>
     </properties>
 
-    <scm>
-        <connection>scm:git:git://github.com/hgschmie/maven-loader.git</connection>
-        <developerConnection>scm:git:git@github.com:hgschmie/maven-loader.git</developerConnection>
-        <url>https://github.com/hgschmie/maven-loader</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <modules>
         <module>code</module>
     </modules>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
-        </license>
-    </licenses>
-
-    <organization>
-        <name>Henning Schmiedehausen</name>
-        <url>https://github.com/hgschmie</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <id>hgschmie</id>
-            <name>Henning Schmiedehausen</name>
-            <timezone>-8</timezone>
-        </developer>
-    </developers>
 
     <dependencyManagement>
         <dependencies>

@@ -33,6 +33,28 @@
     <name>maven-loader</name>
     <packaging>jar</packaging>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Henning Schmiedehausen</name>
+        <url>https://github.com/hgschmie</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>hgschmie</id>
+            <name>Henning Schmiedehausen</name>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
+
     <properties>
         <project.moduleName>de.softwareforge.testing.mavenloader</project.moduleName>
 
