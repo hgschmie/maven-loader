@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         env:
-          MAVEN_CONFIG: "-Pfast -Dbasepom.check.skip-enforcer=false -B -ff"
+          MAVEN_ARGS: "-Pfast -Dbasepom.check.skip-enforcer=false -B -ff"
         run: |
           make install
 
@@ -50,6 +50,6 @@ jobs:
 
       - name: Run unit tests
         env:
-          MAVEN_CONFIG: "-B -ff"
+          MAVEN_ARGS: "-B -ff"
         run: |
           make run-tests

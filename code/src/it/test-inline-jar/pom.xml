@@ -17,9 +17,9 @@
 
     <parent>
         <groupId>de.softwareforge.testing</groupId>
-        <artifactId>maven-loader-build-root</artifactId>
+        <artifactId>maven-loader-root</artifactId>
         <version>@project.version@</version>
-        <relativePath>../../../build</relativePath>
+        <relativePath>../../..</relativePath>
     </parent>
 
     <artifactId>test-inline-jar</artifactId>

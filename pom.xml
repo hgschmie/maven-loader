@@ -17,18 +17,284 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>de.softwareforge.testing</groupId>
-        <artifactId>maven-loader-build-root</artifactId>
-        <version>2.4.3-SNAPSHOT</version>
-        <relativePath>./build</relativePath>
+        <groupId>org.kitei</groupId>
+        <artifactId>kitei-root</artifactId>
+        <version>65.1</version>
+        <relativePath />
     </parent>
+
+    <groupId>de.softwareforge.testing</groupId>
+    <description>All-in-one Maven repository artifact loader</description>
+    <url>https://softwareforge.de/maven-loader/</url>
+    <inceptionYear>2021</inceptionYear>
+    <version>2.4.3-SNAPSHOT</version>
 
     <artifactId>maven-loader-root</artifactId>
     <name>maven-loader :: root</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <dep.maven-loader.version>2.4.3-SNAPSHOT</dep.maven-loader.version>
+        <basepom.release.tag-name-format>maven-loader-@{project.version}</basepom.release.tag-name-format>
+
+        <basepom.deploy.skip>true</basepom.deploy.skip>
+        <basepom.install.skip>true</basepom.install.skip>
+
+        <project.build.targetJdk>11</project.build.targetJdk>
+        <basepom.test.timeout>1800</basepom.test.timeout>
+        <basepom.it.skip>true</basepom.it.skip>
+
+        <!-- use deploy / njord -->
+        <basepom.central-publishing.repo-id>sonatype-central-portal</basepom.central-publishing.repo-id>
+        <basepom.release.profiles>basepom.deploy-release,kitei.release</basepom.release.profiles>
+
+        <basepom.javadoc.title>Maven Loader ${project.version} API</basepom.javadoc.title>
+        <basepom.javadoc.legacy-mode>true</basepom.javadoc.legacy-mode>
+
+        <!-- site is built in the code subdirectory -->
+        <basepom.site.skip>true</basepom.site.skip>
+        <basepom.site.scm.skip-deploy>true</basepom.site.scm.skip-deploy>
+        <basepom.site.scm.id>github</basepom.site.scm.id>
+        <basepom.site.scm.url>scm:git:https://github.com/hgschmie/softwareforge.github.io.git</basepom.site.scm.url>
+        <basepom.site.scm.site-path>/maven-loader/dev</basepom.site.scm.site-path>
+        <basepom.site.fail-javadoc>false</basepom.site.fail-javadoc>
+
+        <dep.plugin.flatten.version>1.7.3</dep.plugin.flatten.version>
+        <dep.plugin.inline.version>1.5.1</dep.plugin.inline.version>
+
+        <dep.slf4j.version>2.0.17</dep.slf4j.version>
+        <dep.junit5.version>5.13.3</dep.junit5.version>
+        <dep.assertj.version>3.27.6</dep.assertj.version>
+        <dep.plexus-utils.version>3.6.0</dep.plexus-utils.version>
+        <dep.sisu-inject.version>0.9.0.M4</dep.sisu-inject.version>
+
+        <!-- must match the resolver used in the maven core libs -->
+        <dep.maven-resolver.version>1.9.24</dep.maven-resolver.version>
+        <dep.maven.version>3.9.11</dep.maven.version>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git://github.com/hgschmie/maven-loader.git</connection>
+        <developerConnection>scm:git:git@github.com:hgschmie/maven-loader.git</developerConnection>
+        <url>https://github.com/hgschmie/maven-loader</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <modules>
-        <module>build</module>
         <module>code</module>
     </modules>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Henning Schmiedehausen</name>
+        <url>https://github.com/hgschmie</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>hgschmie</id>
+            <name>Henning Schmiedehausen</name>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.softwareforge.testing</groupId>
+                <artifactId>maven-loader</artifactId>
+                <version>${dep.maven-loader.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.softwareforge.testing</groupId>
+                <artifactId>maven-loader</artifactId>
+                <classifier>tests</classifier>
+                <version>${dep.maven-loader.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${dep.junit5.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${dep.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${dep.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${dep.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>${dep.plexus-utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.sisu</groupId>
+                <artifactId>org.eclipse.sisu.inject</artifactId>
+                <version>${dep.sisu-inject.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-api</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-spi</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-impl</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-util</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-connector-basic</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-transport-file</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.resolver</groupId>
+                <artifactId>maven-resolver-transport-http</artifactId>
+                <version>${dep.maven-resolver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-resolver-provider</artifactId>
+                <version>${dep.maven.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-settings</artifactId>
+                <version>${dep.maven.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-settings-builder</artifactId>
+                <version>${dep.maven.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${dep.assertj.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>eu.maveniverse.maven.plugins</groupId>
+                    <artifactId>njord</artifactId>
+                    <version>${dep.plugin.njord.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>enforce-convergence</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <!-- Ensure consistency -->
+                                    <dependencyConvergence />
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${dep.plugin.flatten.version}</version>
+                    <configuration>
+                        <flattenMode>ossrh</flattenMode>
+                        <flattenDependencyMode>inherited</flattenDependencyMode>
+                        <omitExclusions>true</omitExclusions>
+                        <pomElements>
+                            <properties>remove</properties>
+                            <distributionManagement>remove</distributionManagement>
+                            <repositories>remove</repositories>
+                        </pomElements>
+                        <outputDirectory>${project.build.directory}</outputDirectory>
+                        <flattenedPomFilename>flattened-pom.xml</flattenedPomFilename>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.basepom.maven</groupId>
+                    <artifactId>inline-maven-plugin</artifactId>
+                    <version>${dep.plugin.inline.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.basepom.inline</groupId>
+                            <artifactId>transformer-optional</artifactId>
+                            <version>${dep.plugin.inline.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>kitei.release</id>
+            <properties>
+                <basepom.site.scm.site-path>/maven-loader/release-${project.version}</basepom.site.scm.site-path>
+            </properties>
+        </profile>
+    </profiles>
 </project>

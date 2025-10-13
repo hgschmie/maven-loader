@@ -18,10 +18,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.softwareforge.testing</groupId>
-        <artifactId>maven-loader-build-root</artifactId>
+        <artifactId>maven-loader-root</artifactId>
         <version>2.4.3-SNAPSHOT</version>
-        <relativePath>../build</relativePath>
     </parent>
+
+    <scm>
+        <connection>scm:git:git://github.com/hgschmie/maven-loader.git</connection>
+        <developerConnection>scm:git:git@github.com:hgschmie/maven-loader.git</developerConnection>
+        <url>https://github.com/hgschmie/maven-loader</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <artifactId>maven-loader</artifactId>
     <name>maven-loader</name>
