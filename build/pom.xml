@@ -27,21 +27,21 @@
         <connection>scm:git:git://github.com/hgschmie/maven-loader.git</connection>
         <developerConnection>scm:git:git@github.com:hgschmie/maven-loader.git</developerConnection>
         <url>https://github.com/hgschmie/maven-loader</url>
-        <tag>maven-loader-2.4.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <groupId>de.softwareforge.testing</groupId>
     <description>All-in-one Maven repository artifact loader</description>
     <url>https://softwareforge.de/maven-loader/</url>
     <inceptionYear>2021</inceptionYear>
-    <version>2.4.2</version>
+    <version>2.4.3-SNAPSHOT</version>
 
     <artifactId>maven-loader-build-root</artifactId>
     <name>maven-loader :: build-root</name>
     <packaging>pom</packaging>
 
     <properties>
-        <dep.maven-loader.version>2.4.2</dep.maven-loader.version>
+        <dep.maven-loader.version>2.4.3-SNAPSHOT</dep.maven-loader.version>
         <basepom.release.tag-name-format>maven-loader-@{project.version}</basepom.release.tag-name-format>
 
         <basepom.deploy.skip>true</basepom.deploy.skip>
