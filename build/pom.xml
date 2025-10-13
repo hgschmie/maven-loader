@@ -53,6 +53,7 @@
         <basepom.it.skip>true</basepom.it.skip>
 
         <!-- use deploy / njord -->
+        <basepom.central-publishing.repo-id>sonatype-central-portal</basepom.central-publishing.repo-id>
         <basepom.release.profiles>basepom.deploy-release,kitei.release</basepom.release.profiles>
 
         <basepom.javadoc.title>Maven Loader ${project.version} API</basepom.javadoc.title>
