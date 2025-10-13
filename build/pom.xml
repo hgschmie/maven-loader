@@ -43,6 +43,7 @@
 
     <properties>
         <dep.maven-loader.version>2.4.2-SNAPSHOT</dep.maven-loader.version>
+        <basepom.release.tag-name-format>maven-loader-@{project.version}</basepom.release.tag-name-format>
 
         <basepom.deploy.skip>true</basepom.deploy.skip>
         <basepom.install.skip>true</basepom.install.skip>
