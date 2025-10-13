@@ -35,7 +35,7 @@ tests:: install-notests run-tests
 install-notests:: MAVEN_ARGS += -Dbasepom.test.skip=true
 install-notests:: install
 
-install-fast:: MAVEN_ARGS += -Pfast
+install-fast:: MAVEN_ARGS += -Pkitei.fast
 install-fast:: install
 
 run-tests:: MAVEN_ARGS += -Dbasepom.it.skip=false

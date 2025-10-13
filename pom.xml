@@ -27,11 +27,6 @@
     <name>maven-loader :: root</name>
     <packaging>pom</packaging>
 
-    <properties>
-        <basepom.deploy.skip>true</basepom.deploy.skip>
-        <basepom.install.skip>true</basepom.install.skip>
-    </properties>
-
     <modules>
         <module>build</module>
         <module>code</module>

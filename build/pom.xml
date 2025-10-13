@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.kitei</groupId>
         <artifactId>kitei-root</artifactId>
-        <version>20</version>
+        <version>65.1</version>
         <relativePath />
     </parent>
 
@@ -44,17 +44,26 @@
     <properties>
         <dep.maven-loader.version>2.4.2-SNAPSHOT</dep.maven-loader.version>
 
+        <basepom.deploy.skip>true</basepom.deploy.skip>
+        <basepom.install.skip>true</basepom.install.skip>
+
         <project.build.targetJdk>11</project.build.targetJdk>
         <basepom.test.timeout>1800</basepom.test.timeout>
         <basepom.it.skip>true</basepom.it.skip>
 
-        <basepom.release.profiles>basepom.central-release,maven-loader.release</basepom.release.profiles>
+        <!-- use deploy / njord -->
+        <basepom.release.profiles>basepom.deploy-release,kitei.release</basepom.release.profiles>
+
+        <basepom.javadoc.title>Maven Loader ${project.version} API</basepom.javadoc.title>
+        <basepom.javadoc.legacy-mode>true</basepom.javadoc.legacy-mode>
+
         <!-- site is built in the code subdirectory -->
         <basepom.site.skip>true</basepom.site.skip>
         <basepom.site.scm.skip-deploy>true</basepom.site.scm.skip-deploy>
         <basepom.site.scm.id>github</basepom.site.scm.id>
         <basepom.site.scm.url>scm:git:https://github.com/hgschmie/softwareforge.github.io.git</basepom.site.scm.url>
         <basepom.site.scm.site-path>/maven-loader/dev</basepom.site.scm.site-path>
+        <basepom.site.fail-javadoc>false</basepom.site.fail-javadoc>
 
         <dep.plugin.flatten.version>1.7.3</dep.plugin.flatten.version>
         <dep.plugin.inline.version>1.5.1</dep.plugin.inline.version>
@@ -91,6 +100,19 @@
             <timezone>-8</timezone>
         </developer>
     </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <name>Central Snapshots</name>
+            <id>${basepom.deploy.snapshot.repo-id}</id>
+            <url>${basepom.deploy.snapshot.url}</url>
+        </snapshotRepository>
+        <repository>
+            <name>Central Releases</name>
+            <id>${basepom.central-publishing.repo-id}</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -240,13 +262,17 @@
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>${dep.plugin.flatten.version}</version>
                     <configuration>
-                        <flattenMode>oss</flattenMode>
+                        <flattenMode>ossrh</flattenMode>
                         <outputDirectory>${project.build.directory}</outputDirectory>
+                        <flattenDependencyMode>inherited</flattenDependencyMode>
+                        <omitExclusions>true</omitExclusions>
                         <pomElements>
                             <properties>remove</properties>
                             <distributionManagement>remove</distributionManagement>
-                            <repositories>remove</repositories>
+                             <repositories>remove</repositories>
                         </pomElements>
+                        <outputDirectory>${project.build.directory}</outputDirectory>
+                        <flattenedPomFilename>flattened-pom.xml</flattenedPomFilename>
                     </configuration>
                 </plugin>
 
@@ -268,33 +294,10 @@
 
     <profiles>
         <profile>
-            <id>maven-loader.release</id>
+            <id>kitei.release</id>
             <properties>
                 <basepom.site.scm.site-path>/maven-loader/release-${project.version}</basepom.site.scm.site-path>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>enforce-java21</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireJavaVersion>
-                                            <version>[21,)</version>
-                                        </requireJavaVersion>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>
