@@ -23,7 +23,7 @@ jobs:
           distribution: temurin
           java-version: 21
           cache: maven
-          server-id: central
+          server-id: sonatype-central-portal
           server-username: NEXUS_REPO_USER
           server-password: NEXUS_REPO_PASSWORD
 
